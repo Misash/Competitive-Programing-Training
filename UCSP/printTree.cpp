@@ -109,7 +109,7 @@ void printVec(vector<vector<string>> vec){
     cout<<"\n\n";
     for (int i = 0; i < vec.size(); ++i) {
         for (int j = 0; j < vec[0].size(); ++j)
-            cout<<vec[i][j]<<" ";
+            cout<<vec[i][j]<<"\t";
         cout<<"\n";
     }
 }
@@ -118,6 +118,7 @@ template <class T>
 void CBinTree<T>::PrintNiveles() {
 
     string delimiter = " ";
+    string fill = "+";
 
     int height = 2*MaxDepth(root) + 1 , j = 0;
     vector<vector<string>> down(height, vector<string> (size, delimiter));
@@ -128,18 +129,18 @@ void CBinTree<T>::PrintNiveles() {
     cout<<"\n\n";
     for (int i = 0; i < height; ++i) {
         for (j = 0; j < size; ++j)
-            if(down[i][j] != delimiter && down[i][j] != "+"  ){
+            if(down[i][j] != delimiter && down[i][j] != fill  ){
                 CBinTreeNode<T>** p;
                 if ( Find(stoi(down[i][j]), p) ){
                     //check nodes
                     for (int x = 0; x <=1 ; ++x) {
                         if((*p)->nodes[x]){
                             int k = j;
-                            while(down[i + 2][k] == delimiter || down[i + 2][k] == "+" ){
-                                down[i + 1][k]="+";
+                            while(down[i + 2][k] == delimiter || down[i + 2][k] == fill ){
+                                down[i + 1][k]=fill;
                                 k = (x)? k+1 : k-1;
                             }
-                            down[i + 1][k]="+";
+                            down[i + 1][k]=fill;
                         }
                     }
 
@@ -253,7 +254,7 @@ int main()
     CBinTree<int> t;
 
     //PRUEBA
-    vector<int> v = {8,3,10,1,0,2,6,9,144,4,7,13,20,18};
+    vector<int> v = {811,3,10,1,4585,2525,62,9,144,4444,7555,153,20,18,1889};
 //    vector<int> v = {50,40,80,30,43,60,95,20,35,73,90,99,10,28};
 
     for (int i : v) {
