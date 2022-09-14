@@ -36,7 +36,8 @@ public:
     int Size();
     void InOrderTrack(CBinTreeNode<T>*  , vector<vector<string>> & , int , int &);
     void PrintNiveles();
-    void TraversePreOrder(string& sb,string padding, string pointer , CBinTreeNode<T> * node);
+    void PrintRight(string& sb, string padding, string pointer , CBinTreeNode<T> * node);
+    void PrintLeft(string& sb, string padding, string pointer , CBinTreeNode<T> * node);
 
 
 private:
@@ -106,11 +107,48 @@ void CBinTree<T>::InOrderTrack(CBinTreeNode<T>* data , vector<vector<string>> &v
     InOrderTrack(data->nodes[1],v,i+1,j);
 }
 
+
+
+template<class T>
+void rotate(vector<vector<T>> &arr)
+{
+
+    // First rotation
+    // with respect to Secondary diagonal
+    int N = arr.size();
+    for(int i = 0; i < N; i++)
+    {
+        for(int j = 0; j < N - i; j++)
+        {
+            T temp = arr[i][j];
+            arr[i][j] = arr[N - 1 - j][N - 1 - i];
+            arr[N - 1 - j][N - 1 - i] = temp;
+        }
+    }
+
+    // Second rotation
+    // with respect to middle row
+    for(int i = 0; i < N / 2; i++)
+    {
+        for(int j = 0; j < N; j++)
+        {
+            T temp = arr[i][j];
+            arr[i][j] = arr[N - 1 - i][j];
+            arr[N - 1 - i][j] = temp;
+        }
+    }
+}
+
+
+
+
+
+
 template <class T>
 void CBinTree<T>::PrintNiveles() {
 
     int height = MaxDepth(root) + 1 , j = 0;
-    vector<vector<string>> vec(height, vector<string> (size, " "));
+    vector<vector<string>> vec(height, vector<string> (size, "_"));
 
     InOrderTrack(root,vec,0,j);
 
@@ -120,10 +158,27 @@ void CBinTree<T>::PrintNiveles() {
             cout<<vec[i][j]<<" ";
         cout<<"\n";
     }
+
+//    vector<vector<string>> vec2(size, vector<string> (height, "|"));
+//
+//    cout<<"\n\n";
+//    for (int i = 0; i < height; ++i) {
+//        for (j = 0; j < size; ++j)
+//            vec2[j][height - 1 -i] = vec[i][j];
+//    }
+//
+//
+//
+//    for (int i = 0; i < vec2.size(); ++i) {
+//        for (j = 0; j < vec2[0].size(); ++j)
+//            cout<<vec2[i][j]<<" ";
+//        cout<<"\n";
+//    }
+
 }
 
 template <class T>
-void CBinTree<T>::TraversePreOrder(string& sb,string padding, string pointer , CBinTreeNode<T> * node){
+void CBinTree<T>::PrintRight(string& sb, string padding, string pointer , CBinTreeNode<T> * node){
     if(!node) return;
 
     sb += padding;
@@ -132,24 +187,63 @@ void CBinTree<T>::TraversePreOrder(string& sb,string padding, string pointer , C
     sb += "\n";
 
     string paddingForBoth = padding;
-    paddingForBoth += "│  ";
+    if( node != root)
+        paddingForBoth += (pointer == "└── ") ? "   " : "│  " ;
 
 
     for (int i = 0; i <= 1; ++i) {
-        pointer = (node->nodes[i] && i)?  "└── " : "├── ";
-        TraversePreOrder(sb,paddingForBoth,pointer,node->nodes[i]);
+        if(node->nodes[0] && node->nodes[1])
+            pointer = (node->nodes[i] && i)?  "└── " : "├── ";
+        else if(node->nodes[i])
+            pointer =  "└── ";
+        PrintRight(sb, paddingForBoth, pointer, node->nodes[i]);
     }
 
 }
 
+
+
+template <class T>
+void CBinTree<T>::PrintLeft(string& sb, string padding, string pointer , CBinTreeNode<T> * node){
+    if(!node) return;
+
+    sb += padding;
+    sb += pointer;
+    sb += to_string(node->value);
+    sb += "\n";
+
+    string paddingForBoth = padding;
+    if( node != root)
+        paddingForBoth += (pointer == "└── ") ? "   " : "│  " ;
+
+
+    for (int i = 0; i <= 1; ++i) {
+        if(node->nodes[0] && node->nodes[1])
+            pointer = (node->nodes[i] && i)?  "└── " : "├── ";
+        else if(node->nodes[i])
+            pointer =  "└── ";
+        PrintRight(sb, paddingForBoth, pointer, node->nodes[i]);
+    }
+
+}
+void reverseStr(string& str)
+{
+    int n = str.length();
+
+    // Swap character starting from two
+    // corners
+    for (int i = 0; i < n / 2; i++)
+        swap(str[i], str[n - i - 1]);
+}
 
 template <class T>
 void CBinTree<T>::Print()
 {
     std::cout<<"\n";
     string parseTree;
-    TraversePreOrder(parseTree,"","",root);
-    cout<<parseTree;
+//    PrintRight(parseTree, "", "", root);
+//    PrintLeft(parseTree, "", "", root);
+//    cout<<parseTree;
 //    InOrder(root);
 }
 
