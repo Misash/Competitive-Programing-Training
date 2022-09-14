@@ -6,6 +6,9 @@
 #include <queue>
 #include <vector>
 #include <string>
+#include <fstream>
+#include <algorithm>
+#include <ctime>
 using namespace std;
 
 
@@ -105,14 +108,32 @@ void CBinTree<T>::InOrderTrack(CBinTreeNode<T>* data , vector<vector<string>> &v
     InOrderTrack(data->nodes[1],v,i+1,j);
 }
 
-void printVec(vector<vector<string>> vec){
-    cout<<"\n\n";
-    for (int i = 0; i < vec.size(); ++i) {
-        for (int j = 0; j < vec[0].size(); ++j)
-            cout<<vec[i][j]<<"\t";
-        cout<<"\n";
+void printVec(vector<vector<string>> arr , string fileName=""){
+
+    int f = arr.size(), c = arr[0].size();
+    cout<<"\n\n\n";
+    if(fileName != ""){
+        fstream File ;
+        File.open(fileName , std::ios_base::app);
+        File<<"\n\n\n\n";
+        for (int i = 0; i < f; ++i) {
+            for (int j = 0; j < c; ++j) {
+                cout<<arr[i][j]<<"\t";
+                File<<arr[i][j]<<"\t";
+            }
+            cout<<endl;
+            File<<endl;
+        }
+    }else{
+        for (int i = 0; i < f; ++i) {
+            for (int j = 0; j < c; ++j) {
+                cout<<arr[i][j]<<"\t";
+            }
+            cout<<endl;
+        }
     }
 }
+
 
 template <class T>
 void CBinTree<T>::PrintNiveles() {
@@ -148,20 +169,24 @@ void CBinTree<T>::PrintNiveles() {
             }
     }
 
+    fstream strassenFile ;
+    string fileName = "./output.txt";
+    strassenFile.open(fileName, ios::out);
+
     vector<vector<string>> left;
     vector<vector<string>> up;
     vector<vector<string>> right;
 
-    printVec(down);
+    printVec(down,fileName);
 
     RotateVec(down, left,delimiter);
-    printVec(left);
+    printVec(left,fileName);
 
     RotateVec(left, up,delimiter);
-    printVec(up);
+    printVec(up,fileName);
 
     RotateVec(up, right,delimiter);
-    printVec(right);
+    printVec(right,fileName);
 
 
 }
@@ -181,91 +206,34 @@ void CBinTree<T>::RotateVec(vector<vector<string>> a , vector<vector<string>>& b
 }
 
 
-//template <class T>
-//void CBinTree<T>::PrintRight(string& sb, string padding, string pointer , CBinTreeNode<T> * node){
-//    if(!node) return;
-//
-//    sb += padding;
-//    sb += pointer;
-//    sb += to_string(node->value);
-//    sb += "\n";
-//
-//    string paddingForBoth = padding;
-//    if( node != root)
-//        paddingForBoth += (pointer == "└── ") ? "   " : "│  " ;
-//
-//
-//    for (int i = 0; i <= 1; ++i) {
-//        if(node->nodes[0] && node->nodes[1])
-//            pointer = (node->nodes[i] && i)?  "└── " : "├── ";
-//        else if(node->nodes[i])
-//            pointer =  "└── ";
-//        PrintRight(sb, paddingForBoth, pointer, node->nodes[i]);
-//    }
-//
-//}
-//
-//
-//
-//template <class T>
-//void CBinTree<T>::PrintLeft(string& sb, string padding, string pointer , CBinTreeNode<T> * node){
-//    if(!node) return;
-//
-//    sb += padding;
-//    sb += pointer;
-//    sb += to_string(node->value);
-//    sb += "\n";
-//
-//    string paddingForBoth = padding;
-//    if( node != root)
-//        paddingForBoth += (pointer == "└── ") ? "   " : "│  " ;
-//
-//
-//    for (int i = 0; i <= 1; ++i) {
-//        if(node->nodes[0] && node->nodes[1])
-//            pointer = (node->nodes[i] && i)?  "└── " : "├── ";
-//        else if(node->nodes[i])
-//            pointer =  "└── ";
-//        PrintRight(sb, paddingForBoth, pointer, node->nodes[i]);
-//    }
-//
-//}
+void generate_random_vectors(int n, vector<int> &vec) {
 
+    int vec_size = 3 + (rand() % n);
+    vec.resize(vec_size);
+    for (int k = 0; k < vec_size; ++k) {
+        vec[k] = 1 + (rand() % 99);
+    }
 
-
-
-template <class T>
-void CBinTree<T>::Print()
-{
-    std::cout<<"\n";
-    string parseTree;
-//    PrintRight(parseTree, "", "", root);
-//    PrintLeft(parseTree, "", "", root);
-//    cout<<parseTree;
-//    InOrder(root);
 }
-
-
-
-
 
 int main()
 {
+    srand(time(0));
     CBinTree<int> t;
 
     //PRUEBA
-    vector<int> v = {811,3,10,1,4585,2525,62,9,144,4444,7555,153,20,18,1889};
+    vector<int> v;
+//    vector<int> v = {811,3,10,1,4585,2525,62,9,144,4444,7555,153,20,18,1889};
 //    vector<int> v = {50,40,80,30,43,60,95,20,35,73,90,99,10,28};
+    generate_random_vectors(20,v);
+
 
     for (int i : v) {
         t.Ins(i);
     }
 
-
     cout<<"\noutput";
     t.PrintNiveles();
-
-
 
 }
 
