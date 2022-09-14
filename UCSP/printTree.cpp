@@ -206,7 +206,7 @@ void CBinTree<T>::RotateVec(vector<vector<string>> a , vector<vector<string>>& b
 }
 
 
-void generate_random_vectors(int n, vector<int> &vec) {
+void generate_random_vector(int n, vector<int> &vec) {
 
     int vec_size = 3 + (rand() % n);
     vec.resize(vec_size);
@@ -225,7 +225,7 @@ int main()
     vector<int> v;
 //    vector<int> v = {811,3,10,1,4585,2525,62,9,144,4444,7555,153,20,18,1889};
 //    vector<int> v = {50,40,80,30,43,60,95,20,35,73,90,99,10,28};
-    generate_random_vectors(20,v);
+    generate_random_vector(20,v);
 
 
     for (int i : v) {
