@@ -98,64 +98,69 @@ int CBinTree<T>::MaxDepth(CBinTreeNode<T>* n)
 
 /* ---  IMPLEMENTACIONES  ---*/
 
+//template <class T>
+//void CBinTree<T>::InOrderTrack(CBinTreeNode<T>* data , vector<vector<string>> &v ,  int i, int &j)
+//{
+//    if ( !data ) return;
+//    InOrderTrack(data->nodes[0],v,i+1,j);
+//    v[i][j++] = std::to_string(data->value);
+//    InOrderTrack(data->nodes[1],v,i+1,j);
+//}
+
+
+
+
 template <class T>
 void CBinTree<T>::InOrderTrack(CBinTreeNode<T>* data , vector<vector<string>> &v ,  int i, int &j)
 {
     if ( !data ) return;
     InOrderTrack(data->nodes[0],v,i+1,j);
-    v[i][j++] = std::to_string(data->value);
+    v[2*i][j++] = std::to_string(data->value);
     InOrderTrack(data->nodes[1],v,i+1,j);
 }
-
-
-
-template<class T>
-void rotate(vector<vector<T>> &arr)
-{
-
-    // First rotation
-    // with respect to Secondary diagonal
-    int N = arr.size();
-    for(int i = 0; i < N; i++)
-    {
-        for(int j = 0; j < N - i; j++)
-        {
-            T temp = arr[i][j];
-            arr[i][j] = arr[N - 1 - j][N - 1 - i];
-            arr[N - 1 - j][N - 1 - i] = temp;
-        }
-    }
-
-    // Second rotation
-    // with respect to middle row
-    for(int i = 0; i < N / 2; i++)
-    {
-        for(int j = 0; j < N; j++)
-        {
-            T temp = arr[i][j];
-            arr[i][j] = arr[N - 1 - i][j];
-            arr[N - 1 - i][j] = temp;
-        }
-    }
-}
-
-
-
-
 
 
 template <class T>
 void CBinTree<T>::PrintNiveles() {
 
-    int height = MaxDepth(root) + 1 , j = 0;
-    vector<vector<string>> vec(height, vector<string> (size, "_"));
+    string delimiter = " ";
+
+    int height = 2*MaxDepth(root) + 1 , j = 0;
+    vector<vector<string>> vec(height, vector<string> (size, delimiter));
 
     InOrderTrack(root,vec,0,j);
+
 
     cout<<"\n\n";
     for (int i = 0; i < height; ++i) {
         for (j = 0; j < size; ++j)
-            cout<<vec[i][j]<<" ";
+            if(vec[i][j] != delimiter && vec[i][j] != "+"  ){
+                CBinTreeNode<T>** p;
+                if ( Find(stoi(vec[i][j]),p) ){
+                    //check nodes
+                    for (int x = 0; x <=1 ; ++x) {
+                        if((*p)->nodes[x]){
+                            int k = j;
+                            while(vec[i+2][k] == delimiter  || vec[i+2][k] == "+" ){
+                                vec[i+1][k]="+";
+                                k = (x)? k+1 : k-1;
+                            }
+                            vec[i+1][k]="+";
+                        }
+                    }
+
+                }
+            }
+
+
+
+    }
+
+
+    cout<<"\n\n";
+    for (int i = 0; i < height; ++i) {
+        for (j = 0; j < size; ++j)
+            cout<<vec[i][j]<<"\t";
         cout<<"\n";
     }
 
