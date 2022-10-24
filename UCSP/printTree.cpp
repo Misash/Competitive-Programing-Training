@@ -221,7 +221,7 @@ int main()
     srand(time(0));
     CBinTree<int> t;
 
-    //PRUEBA
+    //PRUEBAS
     vector<int> v;
 //    vector<int> v = {811,3,10,1,4585,2525,62,9,144,4444,7555,153,20,18,1889};
 //    vector<int> v = {50,40,80,30,43,60,95,20,35,73,90,99,10,28};
